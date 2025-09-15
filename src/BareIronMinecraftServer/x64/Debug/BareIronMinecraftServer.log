@@ -1,0 +1,180 @@
+﻿  globals.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xkeycheck.h(230,9): warning C4005: 'false': macro redefinition
+  (compiling source file 'globals.cpp')
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\globals.hpp(16,9):
+      see previous definition of 'false'
+  
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xkeycheck.h(232,1): error C1189: #error:  The C++ Standard Library forbids macroizing the keyword "false". Enable warning C4005 to find the forbidden define.
+  (compiling source file 'globals.cpp')
+  
+  packets.cpp
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(71,3): error C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(88,23): warning C4267: 'initializing': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(170,81): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(170,91): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(176,26): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(595,54): warning C4244: 'argument': conversion from 'int16_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(627,56): warning C4244: 'argument': conversion from 'uint16_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(860,29): warning C4267: 'argument': conversion from 'size_t' to 'uint32_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(869,30): warning C4267: 'argument': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(1102,20): warning C4267: 'initializing': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.cpp(1123,89): warning C4267: 'argument': conversion from 'size_t' to 'uint16_t', possible loss of data
+  procedures.cpp
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(136,71): error C2228: left of '.size' must have class/struct/union
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(136,71):
+      type is 'uint8_t [256]'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(136,29): warning C4267: 'initializing': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(137,5): error C2660: 'strncpy': function does not take 2 arguments
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\string.h(334,1):
+      see declaration of 'strncpy'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(137,5):
+      while trying to match the argument list '()'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(138,5): error C2660: 'strncpy': function does not take 2 arguments
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\string.h(334,1):
+      see declaration of 'strncpy'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(138,5):
+      while trying to match the argument list '()'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(163,27): warning C4267: 'initializing': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(164,3): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(165,3): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(312,33): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(313,17): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(317,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(319,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(320,35): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(321,38): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(400,5): error C2664: 'int sc_systemChat(int,char *,uint16_t)': cannot convert argument 2 from 'const char [68]' to 'char *'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(400,45):
+      Conversion from string literal loses const qualifier (see /Zc:strictStrings)
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\packets.hpp(58,5):
+      see declaration of 'sc_systemChat'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(400,5):
+      while trying to match the argument list '(int, const char [68], int)'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(556,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(557,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(558,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(559,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(560,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(561,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(562,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(563,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(564,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(565,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(566,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(567,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(568,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(580,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(581,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(582,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(592,5): error C2360: initialization of 'r' is skipped by 'case' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(604,5): error C2361: initialization of 'r' is skipped by 'default' label
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(549,16):
+      see declaration of 'r'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1073,24): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1083,26): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1100,29): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1101,29): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1102,25): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1103,25): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1205,59): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1258,28): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1266,31): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1267,31): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1268,27): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1269,27): warning C4244: 'argument': conversion from 'short' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1366,31): warning C4267: 'initializing': conversion from 'size_t' to 'uint8_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1367,7): error C2660: 'strncpy': function does not take 2 arguments
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\ucrt\string.h(334,1):
+      see declaration of 'strncpy'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1367,7):
+      while trying to match the argument list '()'
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1449,59): warning C4267: 'argument': conversion from 'size_t' to 'uint16_t', possible loss of data
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1371,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1375,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1379,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1383,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1389,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1390,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1394,9): error C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\procedures.cpp(1745,19): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  serialize.cpp
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(47,14): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(47,14):
+      consider using '%zu' in the format string
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(47,14): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(47,14):
+      consider using '%zu' in the format string
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(67,14): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 1 has type 'size_t'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(67,14):
+      consider using '%zu' in the format string
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(67,14): warning C4477: 'printf' : format string '%u' requires an argument of type 'unsigned int', but variadic argument 2 has type 'size_t'
+      C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(67,14):
+      consider using '%zu' in the format string
+  
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(41,16): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(75,12): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(123,16): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\serialize.cpp(151,16): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  tools.cpp
+C:\shares\projects\j2inet\bareiron\src\BareIronMinecraftServer\tools.cpp(17,12): error C1083: Cannot open include file: 'unistd.h': No such file or directory
+  Generating Code...

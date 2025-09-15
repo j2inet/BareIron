@@ -8,3 +8,27 @@ First, I want to give credit to the person to which it is owed. This repository 
 * Source YouTube Video - https://youtu.be/p-k5MPhBSjk?si=ewNUih2gyWHL-AOx
 
 
+# My Journey
+
+I'm engaging in this code as a personal interest. I don't plan to maintain it. This is only a snapshot of what I had to do to get this code to work in this timeframe of 2025 September. 
+
+
+## Software Components
+* Visual Studio 2022
+* Download Updated JDK - https://www.oracle.com/java/technologies/downloads/#jdk24-windows
+* [Minecraft Java Server ](https://piston-data.mojang.com/v1/objects/6bce4ef400e4efaa63a13d5e6f6b500be969ef81/server.jar)
+
+
+## Extraction of the Registries from the Java Server
+
+After downloading the JavaServer, I ran the command 
+
+`java -DbundlerMainClass="net.minecraft.data.Main" -jar `
+
+More on running that command can be found [here0](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Data_Generators)
+
+
+## Modification to the C code
+I want to use some memory-safe C++ features. I've renamed the files from having the `.h` and `.c` extensions to `.hpp` and `.cpp` extensions accordingly. The script for extractign information from `server.java` is also moddified to to output files with those extensions. 
+
+The `ssize_t` (signed size) type is not found on windows. I've converted those to `SSIZE_T` and have commented out includsion of the POSIX file `unistd.h`.
