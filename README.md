@@ -1,4 +1,4 @@
-# A Derivitive Work Based on the Efforts of [p2r3](https://github.com/p2r3)'s project (bareiron)[https://github.com/p2r3/bareiron] 
+# A Derivitive Work Based on the Efforts of [p2r3](https://github.com/p2r3)'s project [bareiron](https://github.com/p2r3/bareiron)
 
 * Taken from commit [6a65b8a](https://github.com/p2r3/bareiron/commit/6a65b8acba6d8dc6aebdf08469f6b4729e0fcf77)
 
