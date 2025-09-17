@@ -78,13 +78,13 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
         if (sc_statusResponse(client_fd)) break;
       } if (state == STATE_LOGIN) {
         uint8_t uuid[16];
-        char name[16];
+        std::vector<char> name;
         if (cs_loginStart(client_fd, uuid, name)) break;
-        if (reservePlayerData(client_fd, uuid, name)) {
+        if (reservePlayerData(client_fd, uuid, name.data())) {
           recv_count = 0;
           return;
         }
-        if (sc_loginSuccess(client_fd, uuid, name)) break;
+        if (sc_loginSuccess(client_fd, uuid, name.data())) break;
       } else if (state == STATE_CONFIGURATION) {
         if (cs_clientInformation(client_fd)) break;
         if (sc_knownPacks(client_fd)) break;
@@ -494,7 +494,8 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
 
 }
 
-int main () {
+
+int wmain (int argc, wchar_t* argv[]) {
   #ifdef _WIN32 //initialize windows socket
     WSADATA wsa;
       if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {

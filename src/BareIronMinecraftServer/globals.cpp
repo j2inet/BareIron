@@ -8,6 +8,8 @@
 #endif
 //#include <unistd.h>
 
+#pragma comment(lib,"ws2_32.lib")
+
 #include "globals.hpp"
 #include <memory>
 #include <vector>
