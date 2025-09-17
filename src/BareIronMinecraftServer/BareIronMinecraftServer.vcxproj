@@ -149,6 +149,7 @@
     <ClCompile Include="BareIronMinecraftServer.cpp" />
     <ClCompile Include="crafting.cpp" />
     <ClCompile Include="globals.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="packets.cpp" />
     <ClCompile Include="procedures.cpp" />
     <ClCompile Include="registries.cpp" />

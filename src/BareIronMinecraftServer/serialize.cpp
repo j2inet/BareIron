@@ -38,7 +38,8 @@ int initSerializer () {
   #endif
 
   // Attempt to open existing world file
-  FILE *file = fopen(FILE_PATH, "rb");
+    FILE* file;
+    errno_t err = fopen_s(&file,FILE_PATH, "rb");
   if (file) {
 
     // Read block changes from the start of the file directly into memory
@@ -72,8 +73,8 @@ int initSerializer () {
     printf("No \"world.bin\" file found, creating one...\n\n");
 
     // Try to create the file in binary write mode
-    file = fopen(FILE_PATH, "wb");
-    if (!file) {
+    errno_t err = fopen_s(&file ,FILE_PATH, "wb");
+    if (err) {
       perror(
         "Failed to open \"world.bin\" for writing.\n"
         "Consider checking permissions or disabling SYNC_WORLD_TO_DISK in \"globals.h\"."
@@ -120,7 +121,8 @@ int initSerializer () {
 void writeBlockChangesToDisk (int from, int to) {
 
   // Try to open the file in rw (without overwriting)
-  FILE *file = fopen(FILE_PATH, "r+b");
+    FILE* file;
+    errno_t err = fopen_s(&file, FILE_PATH, "r+b");
   if (!file) {
     perror("Failed to open \"world.bin\". Block updates have been dropped.");
     return;
@@ -148,7 +150,8 @@ void writeBlockChangesToDisk (int from, int to) {
 void writePlayerDataToDisk () {
 
   // Try to open the file in rw (without overwriting)
-  FILE *file = fopen(FILE_PATH, "r+b");
+    FILE* file;
+    errno_t err = fopen_s(&file,FILE_PATH, "r+b");
   if (!file) {
     perror("Failed to open \"world.bin\". Player updates have been dropped.");
     return;

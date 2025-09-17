@@ -30,9 +30,9 @@
   }
 #endif
 
-SSIZE_T recv_count = static_cast<SSIZE_T>(0);
-std::vector<char> recv_buffer(256);
+SSIZE_T recv_count = 0L;
 
+std::vector<char> recv_buffer(256);
 uint32_t world_seed = INITIAL_WORLD_SEED;
 uint32_t rng_seed = INITIAL_RNG_SEED;
 

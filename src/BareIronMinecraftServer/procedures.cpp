@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <string>
+#include <vector>
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
@@ -17,6 +19,7 @@
 #include "procedures.hpp"
 
 int client_states[MAX_PLAYERS * 2];
+
 
 void setClientState (int client_fd, int new_state) {
   // Look for a client state with a matching file descriptor
@@ -133,15 +136,16 @@ void handlePlayerDisconnect (int client_fd) {
     // Mark the player as being offline
     player_data[i].client_fd = -1;
     // Prepare leave message for broadcast
-    uint8_t player_name_len = strlen(player_data[i].name, recv_buffer.size());
-    strncpy(recv_buffer.data(), player_data[i].name, recv_buffer.size());
-    strncpy(recv_buffer.data() + player_name_len, " left the game");
+    std::string playerName(player_data[i].name);
+    std::string msg = playerName + " left the game";
+    strncpy_s(recv_buffer.data(), recv_buffer.size(), msg.c_str(), msg.size());
+
     // Broadcast this player's leave to all other connected clients
     for (int j = 0; j < MAX_PLAYERS; j ++) {
       if (player_data[j].client_fd == client_fd) continue;
       if (player_data[j].flags & 0x20) continue;
       // Send chat message
-      sc_systemChat(player_data[j].client_fd, (char *)recv_buffer, 14 + player_name_len);
+      sc_systemChat(player_data[j].client_fd, recv_buffer.data(), msg.size());
       // Remove leaving player's entity
       sc_removeEntity(player_data[j].client_fd, client_fd);
     }
@@ -161,12 +165,13 @@ void handlePlayerJoin (PlayerData* player) {
 
   // Prepare join message for broadcast
   uint8_t player_name_len = strlen(player->name);
-  strcpy((char *)recv_buffer, player->name);
-  strcpy((char *)recv_buffer + player_name_len, " joined the game");
+  std::string joined_msg(" joined the game");
+  strncpy_s((char *)recv_buffer.data(), recv_buffer.size(), player->name, player_name_len);
+  strncpy_s((char *)recv_buffer.data() + player_name_len, recv_buffer.size(), joined_msg.c_str(), joined_msg.size());
 
   // Inform other clients (and the joining client) of the player's name and entity
   for (int i = 0; i < MAX_PLAYERS; i ++) {
-    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, 16 + player_name_len);
+    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer.data(), 16 + player_name_len);
     sc_playerInfoUpdateAddPlayer(player_data[i].client_fd, *player);
     if (player_data[i].client_fd != player->client_fd) {
       sc_spawnEntityPlayer(player_data[i].client_fd, *player);
@@ -397,7 +402,11 @@ void failBlockChange (short x, uint8_t y, short z, uint8_t block) {
     // Reset the block they tried to change
     sc_blockUpdate(player_data[i].client_fd, x, y, z, before);
     // Broadcast a chat message warning about the limit
-    sc_systemChat(player_data[i].client_fd, "Block changes limit exceeded. Restore original terrain to continue.", 67);
+    std::string msg = "Block changes limit exceeded. Restore original terrain to continue.";
+    std::vector<char> msgVector(msg.size());
+
+    std::memcpy(msgVector.data(), msg.c_str(), msg.size());
+    sc_systemChat(player_data[i].client_fd, msgVector.data(), msgVector.size());
   }
 
 }
@@ -544,13 +553,15 @@ uint16_t getMiningResult (uint16_t held_item, uint8_t block) {
 
   switch (block) {
 
-    case B_oak_leaves:
+  case B_oak_leaves:
+  {
       if (held_item == I_shears) return I_oak_leaves;
       uint32_t r = fast_rand();
       if (r < 21474836) return I_apple; // 0.5%
       if (r < 85899345) return I_stick; // 2%
       if (r < 214748364) return I_oak_sapling; // 5%
       return 0;
+  }
       break;
 
     case B_stone:
@@ -566,39 +577,45 @@ uint16_t getMiningResult (uint16_t held_item, uint8_t block) {
     case B_diamond_block:
     case B_redstone_block:
     case B_coal_block:
-      // Check if player is holding (any) pickaxe
-      if (
-        held_item != I_wooden_pickaxe &&
-        held_item != I_stone_pickaxe &&
-        held_item != I_iron_pickaxe &&
-        held_item != I_golden_pickaxe &&
-        held_item != I_diamond_pickaxe &&
-        held_item != I_netherite_pickaxe
-      ) return 0;
+    {
+        // Check if player is holding (any) pickaxe
+        if (
+            held_item != I_wooden_pickaxe &&
+            held_item != I_stone_pickaxe &&
+            held_item != I_iron_pickaxe &&
+            held_item != I_golden_pickaxe &&
+            held_item != I_diamond_pickaxe &&
+            held_item != I_netherite_pickaxe
+            ) return 0;
+    }
       break;
 
     case B_gold_ore:
     case B_redstone_ore:
     case B_diamond_ore:
-      // Check if player is holding an iron (or better) pickaxe
-      if (
-        held_item != I_iron_pickaxe &&
-        held_item != I_golden_pickaxe &&
-        held_item != I_diamond_pickaxe &&
-        held_item != I_netherite_pickaxe
-      ) return 0;
+    {
+        // Check if player is holding an iron (or better) pickaxe
+        if (
+            held_item != I_iron_pickaxe &&
+            held_item != I_golden_pickaxe &&
+            held_item != I_diamond_pickaxe &&
+            held_item != I_netherite_pickaxe
+            ) return 0;
+    }
       break;
 
     case B_snow:
-      // Check if player is holding (any) shovel
-      if (
-        held_item != I_wooden_shovel &&
-        held_item != I_stone_shovel &&
-        held_item != I_iron_shovel &&
-        held_item != I_golden_shovel &&
-        held_item != I_diamond_shovel &&
-        held_item != I_netherite_shovel
-      ) return 0;
+    {
+        // Check if player is holding (any) shovel
+        if (
+            held_item != I_wooden_shovel &&
+            held_item != I_stone_shovel &&
+            held_item != I_iron_shovel &&
+            held_item != I_golden_shovel &&
+            held_item != I_diamond_shovel &&
+            held_item != I_netherite_shovel
+            ) return 0;
+    }
       break;
 
     default: break;
@@ -1364,37 +1381,51 @@ void hurtEntity (int entity_id, int attacker_id, uint8_t damage_type, uint8_t da
 
       // Prepare death message in recv_buffer
       uint8_t player_name_len = strlen(player->name);
-      strncpy(recv_buffer.data(), player->name, recv_buffer.size());
+      std::string playerName(player->name, player_name_len);
+      std::string msg;
+      for (auto i = 0; i < recv_buffer.size(); ++i)
+      {
+          recv_buffer[i] = '\0';
+      }
+           
+
+      
 
       if (damage_type == D_fall && damage > 8) {
-        // Killed by a greater than 5 block fall
-        strcpy((char *)recv_buffer + player_name_len, " fell from a high place");
-        recv_buffer[player_name_len + 23] = '\0';
+        // Killed by a greater than 5 block fall        
+          msg = playerName + std::string(" fell from a high place");
+        //std::string sourceString = 
+        //strcpy((char *)recv_buffer + player_name_len, " fell from a high place");
+        //recv_buffer[player_name_len + 23] = '\0';
       } else if (damage_type == D_fall) {
         // Killed by a less than 5 block fall
-        strcpy((char *)recv_buffer + player_name_len, " hit the ground too hard");
-        recv_buffer[player_name_len + 24] = '\0';
+          msg = playerName + std::string(" hit the ground too hard");
+        //strcpy((char *)recv_buffer + player_name_len, " hit the ground too hard");
+        //recv_buffer[player_name_len + 24] = '\0';
       } else if (damage_type == D_lava) {
         // Killed by being in lava
-        strcpy((char *)recv_buffer + player_name_len, " tried to swim in lava");
-        recv_buffer[player_name_len + 22] = '\0';
+          msg = playerName + std::string(" tried to swim in lava");
+        //strcpy((char *)recv_buffer + player_name_len, " tried to swim in lava");
+        //recv_buffer[player_name_len + 22] = '\0';
       } else if (attacker_id < -1) {
         // Killed by a mob
-        strcpy((char *)recv_buffer + player_name_len, " was slain by a mob");
-        recv_buffer[player_name_len + 19] = '\0';
+          msg = playerName + std::string(" was slain by a mob");
+        //strcpy((char *)recv_buffer + player_name_len, " was slain by a mob");
+        //recv_buffer[player_name_len + 19] = '\0';
       } else if (attacker_id > 0) {
         // Killed by a player
         PlayerData *attacker;
         if (getPlayerData(attacker_id, &attacker)) return;
-        strncpy((char *)(recv_buffer.data() + player_name_len), " was slain by ");
-        strncpy((char *)(recv_buffer.data() + player_name_len + 14), attacker->name);
+        msg = playerName + std::string(" was slain by ") + std::string(attacker->name);        
         recv_buffer[player_name_len + 14 + strlen(attacker->name)] = '\0';
       } else {
         // Unknown death reason
-        strcpy((char *)recv_buffer + player_name_len, " died");
-        recv_buffer[player_name_len + 4] = '\0';
+          msg = playerName + " died";        
       }
-
+      for (int i = 0; i < recv_buffer.size(); ++i)
+      {
+          recv_buffer[i]='\0';
+      }
     } else player->health -= effective_damage;
 
     // Update health on the client
@@ -1446,7 +1477,7 @@ void hurtEntity (int entity_id, int attacker_id, uint8_t damage_type, uint8_t da
     sc_entityEvent(client_fd, entity_id, 3);
     if (entity_id >= 0) {
       // If a player died, broadcast their death message
-      sc_systemChat(client_fd, (char *)recv_buffer, strlen((char *)recv_buffer));
+      sc_systemChat(client_fd, (char *)recv_buffer.data(), strlen((char*)recv_buffer.data()));
     }
   }
 

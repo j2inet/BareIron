@@ -27,18 +27,17 @@
     #include <netinet/in.h>
     #include <arpa/inet.h>
   #endif
-  #include <unistd.h>
   #include <time.h>
 #endif
 
-#include "globals.h"
-#include "tools.h"
-#include "varnum.h"
-#include "packets.h"
-#include "worldgen.h"
-#include "registries.h"
-#include "procedures.h"
-#include "serialize.h"
+#include "globals.hpp"
+#include "tools.hpp"
+#include "varnum.hpp"
+#include "packets.hpp"
+#include "worldgen.hpp"
+#include "registries.hpp"
+#include "procedures.hpp"
+#include "serialize.hpp"
 
 /**
  * Routes an incoming packet to its packet handler or procedure.
@@ -191,7 +190,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
     case 0x1B:
       if (state == STATE_PLAY) {
         // Serverbound keep-alive (ignored)
-        recv_all(client_fd, recv_buffer, length, false);
+        recv_all(client_fd, recv_buffer.data(), length, false);
       }
       break;
 
@@ -465,7 +464,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
         if (packet_id < 16) printf("0");
         printf("%X, length: %d, state: %d\n\n", packet_id, length, state);
       #endif
-      recv_all(client_fd, recv_buffer, length, false);
+      recv_all(client_fd, recv_buffer.data(), length, false);
       break;
 
   }
@@ -475,7 +474,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
   if (processed_length == length) return;
 
   if (length > processed_length) {
-    recv_all(client_fd, recv_buffer, length - processed_length, false);
+    recv_all(client_fd, recv_buffer.data(), length - processed_length, false);
   }
 
   #ifdef DEV_LOG_LENGTH_DISCREPANCY
@@ -557,14 +556,14 @@ int main () {
 
   if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
     perror("bind failed");
-    close(server_fd);
+    closesocket(server_fd);
     exit(EXIT_FAILURE);
   }
 
   // Listen for incoming connections
   if (listen(server_fd, 5) < 0) {
     perror("listen failed");
-    close(server_fd);
+    closesocket(server_fd);
     exit(EXIT_FAILURE);
   }
   printf("Server listening on port %d...\n", PORT);
@@ -630,7 +629,7 @@ int main () {
 
     // Check if at least 2 bytes are available for reading
     #ifdef _WIN32
-    recv_count = recv(client_fd, recv_buffer, 2, MSG_PEEK);
+    recv_count = recv(client_fd, recv_buffer.data(), 2, MSG_PEEK);
     if (recv_count == 0) {
       disconnectClient(&clients[client_index], 1);
       continue;
@@ -718,7 +717,7 @@ int main () {
 
   }
 
-  close(server_fd);
+  closesocket(server_fd);
  
   #ifdef _WIN32 //cleanup windows socket
     WSACleanup();

@@ -1,7 +1,10 @@
+#pragma once
 #ifndef H_GLOBALS
 #define H_GLOBALS
 
 #include <stdint.h>
+#include <vector>
+#include <Windows.h>
 //#include <unistd.h>
 
 #ifdef ESP_PLATFORM
@@ -163,8 +166,9 @@
 #define STATE_CONFIGURATION 4
 #define STATE_PLAY 5
 
-extern size_t recv_count;
-extern uint8_t recv_buffer[256];
+extern SSIZE_T recv_count;
+
+extern std::vector<char> recv_buffer;
 
 extern uint32_t world_seed;
 extern uint32_t rng_seed;

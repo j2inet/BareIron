@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <string>
+#include <vector>
 
 #ifdef ESP_PLATFORM
   #include "lwip/sockets.h"
@@ -63,17 +65,20 @@ int cs_handshake (int client_fd) {
 }
 
 // C->S Login Start
-int cs_loginStart (int client_fd, uint8_t *uuid, char *name) {
+int cs_loginStart (int client_fd, uint8_t *uuid, std::vector<char> name) {
   printf("Received Login Start:\n");
 
   readString(client_fd);
   if (recv_count == -1) return 1;
-  strncpy(name, (char *)recv_buffer, 16 - 1);
+  std::string playerName(recv_buffer.data());
+  
+  strncpy_s(name.data(), name.size(), (char*)recv_buffer.data(), recv_buffer.size());
   name[16 - 1] = '\0';
-  printf("  Player name: %s\n", name);
-  recv_count = recv_all(client_fd, recv_buffer, 16, false);
+  printf("  Player name: %s\n", playerName.data());
+  strncpy_s(name.data(), name.size(), playerName.c_str(), playerName.size());
+  recv_count = recv_all(client_fd, recv_buffer.data(), 16, false);
   if (recv_count == -1) return 1;
-  memcpy(uuid, recv_buffer, 16);
+  memcpy(uuid, recv_buffer.data(), 16);
   printf("  Player UUID: ");
   for (int i = 0; i < 16; i ++) printf("%x", uuid[i]);
   printf("\n\n");
@@ -82,15 +87,15 @@ int cs_loginStart (int client_fd, uint8_t *uuid, char *name) {
 }
 
 // S->C Login Success
-int sc_loginSuccess (int client_fd, uint8_t *uuid, char *name) {
+int sc_loginSuccess (int client_fd, uint8_t *uuid, std::vector<char> name) {
   printf("Sending Login Success...\n\n");
 
-  uint8_t name_length = strlen(name);
+  uint8_t name_length = strlen(name.data());
   writeVarInt(client_fd, 1 + 16 + sizeVarInt(name_length) + name_length + 1);
   writeVarInt(client_fd, 0x02);
   send_all(client_fd, uuid, 16);
   writeVarInt(client_fd, name_length);
-  send_all(client_fd, name, name_length);
+  send_all(client_fd, name.data(), name_length);
   writeVarInt(client_fd, 0);
 
   return 0;
@@ -153,7 +158,7 @@ int cs_pluginMessage (int client_fd) {
   readString(client_fd);
   if (recv_count == -1) return 1;
   printf("  Channel: \"%s\"\n", recv_buffer);
-  if (strcmp((char *)recv_buffer, "minecraft:brand") == 0) {
+  if (strcmp((char *)recv_buffer.data(), "minecraft:brand") == 0) {
     readString(client_fd);
     if (recv_count == -1) return 1;
     printf("  Brand: \"%s\"\n", recv_buffer);
@@ -530,7 +535,7 @@ int cs_useItem (int client_fd) {
   int sequence = readVarInt(client_fd);
 
   // Ignore yaw/pitch
-  recv_all(client_fd, recv_buffer, 8, false);
+  recv_all(client_fd, recv_buffer.data(), 8, false);
 
   PlayerData *player;
   if (getPlayerData(client_fd, &player)) return 1;
@@ -659,9 +664,9 @@ int cs_clickContainer (int client_fd) {
 
     // ignore components
     tmp = readVarInt(client_fd);
-    recv_all(client_fd, recv_buffer, tmp, false);
+    recv_all(client_fd, recv_buffer.data(), tmp, false);
     tmp = readVarInt(client_fd);
-    recv_all(client_fd, recv_buffer, tmp, false);
+    recv_all(client_fd, recv_buffer.data(), tmp, false);
 
     if (count > 0 && apply_changes) {
       *p_item = item;
@@ -692,9 +697,9 @@ int cs_clickContainer (int client_fd) {
     player->flagval_8 = readVarInt(client_fd);
     // ignore components
     tmp = readVarInt(client_fd);
-    recv_all(client_fd, recv_buffer, tmp, false);
+    recv_all(client_fd, recv_buffer.data(), tmp, false);
     tmp = readVarInt(client_fd);
-    recv_all(client_fd, recv_buffer, tmp, false);
+    recv_all(client_fd, recv_buffer.data(), tmp, false);
   } else {
     player->flagval_16 = 0;
     player->flagval_8 = 0;
@@ -1098,7 +1103,7 @@ int cs_chat (int client_fd) {
   PlayerData *player;
   if (getPlayerData(client_fd, &player)) return 1;
 
-  size_t message_len = strlen((char *)recv_buffer);
+  size_t message_len = strlen((char *)recv_buffer.data());
   uint8_t name_len = strlen(player->name);
 
   // To be safe, cap messages to 32 bytes before the buffer length
@@ -1108,9 +1113,9 @@ int cs_chat (int client_fd) {
   }
 
   // Shift message contents forward to make space for player name tag
-  memmove(recv_buffer + name_len + 3, recv_buffer, message_len + 1);
+  memmove(recv_buffer.data() + name_len + 3, recv_buffer.data(), message_len + 1);
   // Copy player name to index 1
-  memcpy(recv_buffer + 1, player->name, name_len);
+  memcpy(recv_buffer.data() + 1, player->name, name_len);
   // Surround player name with brackets and a space
   recv_buffer[0] = '<';
   recv_buffer[name_len + 1] = '>';
@@ -1120,7 +1125,7 @@ int cs_chat (int client_fd) {
   for (int i = 0; i < MAX_PLAYERS; i ++) {
     if (player_data[i].client_fd == -1) continue;
     if (player_data[i].flags & 0x20) continue;
-    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer, message_len + name_len + 3);
+    sc_systemChat(player_data[i].client_fd, (char *)recv_buffer.data(), message_len + name_len + 3);
   }
 
   readUint64(client_fd); // Ignore timestamp
@@ -1128,11 +1133,11 @@ int cs_chat (int client_fd) {
 
   // Ignore signature (if any)
   uint8_t has_signature = readByte(client_fd);
-  if (has_signature) recv_all(client_fd, recv_buffer, 256, false);
+  if (has_signature) recv_all(client_fd, recv_buffer.data(), 256, false);
 
   readVarInt(client_fd); // Ignore message count
   // Ignore acknowledgement bitmask and checksum
-  recv_all(client_fd, recv_buffer, 4, false);
+  recv_all(client_fd, recv_buffer.data(), 4, false);
 
   return 0;
 }
@@ -1145,15 +1150,15 @@ int cs_interact (int client_fd) {
 
   if (type == 2) {
     // Ignore target coordinates
-    recv_all(client_fd, recv_buffer, 12, false);
+    recv_all(client_fd, recv_buffer.data(), 12, false);
   }
   if (type != 1) {
     // Ignore hand
-    recv_all(client_fd, recv_buffer, 1, false);
+    recv_all(client_fd, recv_buffer.data(), 1, false);
   }
 
   // Ignore sneaking flag
-  recv_all(client_fd, recv_buffer, 1, false);
+  recv_all(client_fd, recv_buffer.data(), 1, false);
 
   if (type == 1) {
     hurtEntity(entity_id, client_fd, D_generic, 1);
