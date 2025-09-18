@@ -224,10 +224,19 @@ double readDouble (int client_fd) {
 }
 
 // Reads a networked string into recv_buffer
-void readString (int client_fd) {
+ReadResult<std::string> readString (int client_fd) {
   uint32_t length = readVarInt(client_fd);
+  std::fill(recv_buffer.begin(), recv_buffer.end(), 0);
   recv_count = recv_all(client_fd, recv_buffer.data(), length, false);
-  recv_buffer[recv_count] = '\0';
+  ReadResult<std::string> retVal;
+  retVal.success = recv_count > 0;
+  if (retVal.success)
+  {
+      retVal.data = std::string(recv_buffer.data(), recv_count);
+  }
+  
+  return retVal;
+  //recv_buffer[recv_count] = '\0';
 }
 
 uint32_t fast_rand () {
@@ -249,11 +258,15 @@ uint64_t splitmix64 (uint64_t state) {
 // On ESP-IDF, this is available in "esp_timer.h", and returns time *since
 // the start of the program*, and NOT wall clock time. To ensure
 // compatibility, this should only be used to measure time intervals.
+LARGE_INTEGER firstRead = { 0 };
 int64_t get_program_time () {
+    if (firstRead.QuadPart == 0) {
+        QueryPerformanceCounter(&firstRead);
+    }
     LARGE_INTEGER frequency, time;
     QueryPerformanceCounter(&time);
     QueryPerformanceCounter(&frequency);
-    auto timeMS = time.QuadPart *  1000000 / frequency.QuadPart;
+    auto timeMS = (time.QuadPart - firstRead.QuadPart)*  1000000 / frequency.QuadPart;
     return timeMS;
     /*
   struct timespec ts;

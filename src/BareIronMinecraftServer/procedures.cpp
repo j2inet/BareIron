@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <string>
 #include <vector>
+#include <iostream>
 #ifdef _WIN32
 #include <winsock2.h>
 #endif
@@ -191,7 +192,7 @@ void disconnectClient (int *client_fd, int cause) {
   handlePlayerDisconnect(*client_fd);
   #ifdef _WIN32
   closesocket(*client_fd);
-  printf("Disconnected client %d, cause: %d, errno: %d\n", *client_fd, cause, WSAGetLastError());
+  std::cout << "\x1b[31mDisconnected client\x1b[37m " << *client_fd << ", cause: " << cause << ", errno: " << WSAGetLastError() << std::endl;
   #else
   close(*client_fd);
   printf("Disconnected client %d, cause: %d, errno: %d\n\n", *client_fd, cause, errno);

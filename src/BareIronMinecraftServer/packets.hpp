@@ -3,7 +3,7 @@
 
 // Serverbound packets
 int cs_handshake (int client_fd);
-int cs_loginStart (int client_fd, uint8_t* uuid, std::vector<char> name);
+int cs_loginStart (int client_fd, uint8_t* uuid, std::vector<char>& name);
 int cs_clientInformation (int client_fd);
 int cs_pluginMessage (int client_fd);
 int cs_playerAction (int client_fd);

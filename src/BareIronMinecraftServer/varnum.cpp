@@ -41,7 +41,9 @@ int sizeVarInt (uint32_t value) {
 }
 
 void writeVarInt (int client_fd, uint32_t value) {
+    int count = 0;
   while (true) {
+      ++count;
     if ((value & ~SEGMENT_BITS) == 0) {
       writeByte(client_fd, value);
       return;

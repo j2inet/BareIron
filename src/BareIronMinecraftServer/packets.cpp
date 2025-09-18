@@ -2,6 +2,8 @@
 #include <string.h>
 #include <string>
 #include <vector>
+#include <iterator>
+#include <iostream>
 
 #ifdef ESP_PLATFORM
   #include "lwip/sockets.h"
@@ -52,9 +54,10 @@ int cs_handshake (int client_fd) {
   printf("Received Handshake:\n");
 
   printf("  Protocol version: %d\n", (int)readVarInt(client_fd));
-  readString(client_fd);
-  if (recv_count == -1) return 1;
-  printf("  Server address: %s\n", recv_buffer);
+  auto stringResult = readString(client_fd);
+  if (!stringResult.success) return -1;
+  //if (recv_count == -1) return 1;
+  printf("  Server address: %s\n", stringResult.data.c_str());
   printf("  Server port: %u\n", readUint16(client_fd));
   int intent = readVarInt(client_fd);
   if (intent == VARNUM_ERROR) return 1;
@@ -65,17 +68,18 @@ int cs_handshake (int client_fd) {
 }
 
 // C->S Login Start
-int cs_loginStart (int client_fd, uint8_t *uuid, std::vector<char> name) {
+int cs_loginStart (int client_fd, uint8_t *uuid, std::vector<char>& name) {
   printf("Received Login Start:\n");
 
-  readString(client_fd);
-  if (recv_count == -1) return 1;
-  std::string playerName(recv_buffer.data());
-  
-  strncpy_s(name.data(), name.size(), (char*)recv_buffer.data(), recv_buffer.size());
-  name[16 - 1] = '\0';
+  auto stringResult = readString(client_fd);
+  if (!stringResult.success) return 1;
+  //if (recv_count == -1) return 1;
+  std::string playerName = stringResult.data;
+  std::copy(playerName.begin(), playerName.end(), std::back_inserter(name));// name.data(), playerName.c_str(), playerName.size());
+  name.push_back('\0');
+  //strncpy_s(name.data(), name.size(), (char*)recv_buffer.data(), recv_buffer.size());  
   printf("  Player name: %s\n", playerName.data());
-  strncpy_s(name.data(), name.size(), playerName.c_str(), playerName.size());
+  //strncpy_s(name.data(), name.size(), playerName.c_str(), playerName.size());
   recv_count = recv_all(client_fd, recv_buffer.data(), 16, false);
   if (recv_count == -1) return 1;
   memcpy(uuid, recv_buffer.data(), 16);
@@ -104,9 +108,10 @@ int sc_loginSuccess (int client_fd, uint8_t *uuid, std::vector<char> name) {
 int cs_clientInformation (int client_fd) {
   int tmp;
   printf("Received Client Information:\n");
-  readString(client_fd);
-  if (recv_count == -1) return 1;
-  printf("  Locale: %s\n", recv_buffer);
+  auto stringResult = readString(client_fd);
+  if (!stringResult.success) return 1;
+  //if (recv_count == -1) return 1;
+  std::cout << "  Locale: " << stringResult.data << std::endl;
   tmp = readByte(client_fd);
   if (recv_count == -1) return 1;
   printf("  View distance: %d\n", tmp);
@@ -155,13 +160,15 @@ int sc_knownPacks (int client_fd) {
 // C->S Serverbound Plugin Message
 int cs_pluginMessage (int client_fd) {
   printf("Received Plugin Message:\n");
-  readString(client_fd);
-  if (recv_count == -1) return 1;
-  printf("  Channel: \"%s\"\n", recv_buffer);
+  auto stringResult = readString(client_fd);
+  if (!stringResult.success) return 1;
+  //if (recv_count == -1) return 1;
+  printf("  Channel: \"%s\"\n", stringResult.data.c_str());
   if (strcmp((char *)recv_buffer.data(), "minecraft:brand") == 0) {
-    readString(client_fd);
-    if (recv_count == -1) return 1;
-    printf("  Brand: \"%s\"\n", recv_buffer);
+    auto stringResult = readString(client_fd);
+    if (!stringResult.success) return -1;
+    //if (recv_count == -1) return 1;
+    printf("  Brand: \"%s\"\n", stringResult.data.c_str());
   }
   printf("\n");
   return 0;
@@ -1098,7 +1105,7 @@ int sc_systemChat (int client_fd, char* message, uint16_t len) {
 // C->S Chat Message
 int cs_chat (int client_fd) {
 
-  readString(client_fd);
+  auto stringResult = readString(client_fd);
 
   PlayerData *player;
   if (getPlayerData(client_fd, &player)) return 1;
@@ -1251,12 +1258,10 @@ int cs_playerLoaded (int client_fd) {
 // S->C Registry Data (multiple packets) and Update Tags (configuration, multiple packets)
 int sc_registries (int client_fd) {
 
-  printf("Sending Registries\n\n");
+  std::cout <<"Sending Registries\n\n";
   send_all(client_fd, registries_bin, sizeof(registries_bin));
 
-  printf("Sending Tags\n\n");
+  std::cout << "Sending Tags\n\n";
   send_all(client_fd, tags_bin, sizeof(tags_bin));
-
   return 0;
-
 }

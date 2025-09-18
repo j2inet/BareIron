@@ -3,6 +3,7 @@
 
 //#include <unistd.h>
 #include <BaseTsd.h>
+#include <string>
 #include "globals.hpp"
 
 static inline int mod_abs (int a, int b) {
@@ -12,6 +13,12 @@ static inline int div_floor (int a, int b) {
   return a % b < 0 ? (a - b) / b : a / b;
 }
 
+template<typename T>
+struct ReadResult
+{
+	bool success;
+	T data;
+};
 extern uint64_t total_bytes_received;
 SSIZE_T recv_all (int client_fd, void *buf, size_t n, uint8_t require_first);
 SSIZE_T send_all (int client_fd, const void *buf, SSIZE_T len);
@@ -32,7 +39,7 @@ int64_t readInt64 (int client_fd);
 float readFloat (int client_fd);
 double readDouble (int client_fd);
 
-void readString (int client_fd);
+ReadResult<std::string> readString (int client_fd);
 
 uint32_t fast_rand ();
 uint64_t splitmix64 (uint64_t state);

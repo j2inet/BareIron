@@ -3,10 +3,13 @@
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <iostream>
 
 #ifndef CLOCK_REALTIME
 #define CLOCK_REALTIME 0
 #endif
+
+#define DEV_LOG_UNKNOWN_PACKETS
 
 #ifdef ESP_PLATFORM
   #include "freertos/FreeRTOS.h"
@@ -39,6 +42,19 @@
 #include "procedures.hpp"
 #include "serialize.hpp"
 
+
+std::string getStateName(int state)
+{
+    switch (state)
+    {
+    case STATE_NONE: return "none";
+    case STATE_LOGIN: return "Login";
+    case STATE_CONFIGURATION: return "Configuration";
+    case STATE_PLAY: return "Play";
+    case STATE_STATUS: return "Status";
+    default: return "unknown";
+    }
+}
 /**
  * Routes an incoming packet to its packet handler or procedure.
  *
@@ -68,7 +84,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
 
   // Count the amount of bytes received to catch length discrepancies
   uint64_t bytes_received_start = total_bytes_received;
-
+  printf("state: %s packet id: %x \r\n", getStateName(state).c_str(), packet_id);
   switch (packet_id) {
 
     case 0x00:
@@ -594,6 +610,7 @@ int wmain (int argc, wchar_t* argv[]) {
   while (true) {
     // Check if it's time to yield to the idle task
     task_yield();
+    Sleep(1);
 
     // Attempt to accept a new connection
     for (int i = 0; i < MAX_PLAYERS; i ++) {
@@ -632,9 +649,11 @@ int wmain (int argc, wchar_t* argv[]) {
     // Check if at least 2 bytes are available for reading
     #ifdef _WIN32
     recv_count = recv(client_fd, recv_buffer.data(), 2, MSG_PEEK);
-    if (recv_count == 0) {
-      disconnectClient(&clients[client_index], 1);
-      continue;
+    if (recv_count == 0) 
+    {
+        std::cerr << "No bytes were available for reading " << std::endl;
+        disconnectClient(&clients[client_index], 1);
+        continue;
     }
     if (recv_count == SOCKET_ERROR) {
       int err = WSAGetLastError();
