@@ -84,8 +84,9 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
           recv_count = 0;
           return;
         }
-        if (sc_loginSuccess(client_fd, uuid, name.data())) break;
-      } else if (state == STATE_CONFIGURATION) {
+        if (sc_loginSuccess(client_fd, uuid, name)) break;
+      } 
+      else if (state == STATE_CONFIGURATION) {
         if (cs_clientInformation(client_fd)) break;
         if (sc_knownPacks(client_fd)) break;
         if (sc_registries(client_fd)) break;
