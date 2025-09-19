@@ -27,6 +27,7 @@
 #include "crafting.hpp"
 #include "procedures.hpp"
 #include "packets.hpp"
+#include "protocol.hpp"
 
 // S->C Status Response (server list ping)
 int sc_statusResponse (int client_fd) {
@@ -53,7 +54,7 @@ int sc_statusResponse (int client_fd) {
 int cs_handshake (int client_fd) {
   printf("Received Handshake:\n");
 
-  printf("  Protocol version: %d\n", (int)readVarInt(client_fd));
+  std::cout << "  Protocol version: " << GetProtocolVersionName((ProtocolVersions)readVarInt(client_fd)) << std::endl;
   auto stringResult = readString(client_fd);
   if (!stringResult.success) return -1;
   //if (recv_count == -1) return 1;
@@ -145,16 +146,48 @@ int cs_clientInformation (int client_fd) {
 
 // S->C Clientbound Known Packs
 int sc_knownPacks (int client_fd) {
-  printf("Sending Server's Known Packs\n\n");
-  char known_packs[] = {
+    std::cout << "Sending Server's Known Packs\n\n" << std::endl;
+  std::vector<char> known_packs = {
     0x0e, 0x01, 0x09, 0x6d, 0x69, 0x6e,
     0x65, 0x63, 0x72, 0x61, 0x66, 0x74, 0x04, 0x63,
     0x6f, 0x72, 0x65, 0x06, 0x31, 0x2e, 0x32, 0x31,
     0x2e, 0x38
   };
-  writeVarInt(client_fd, 24);
-  send_all(client_fd, &known_packs, 24);
+  writeVarInt(client_fd, known_packs.size());
+  send_all(client_fd, known_packs.data(), known_packs.size());
   return 0;
+}
+
+
+ /*int readVarInt(int client_fd) {
+    int value = 0;
+    int position = 0;
+    byte currentByte;
+
+    while (true) {
+        currentByte = readByte(client_fd);
+        value |= (currentByte & SEGMENT_BITS) << position;
+
+        if ((currentByte & CONTINUE_BIT) == 0) break;
+        position += 7;
+        if (position >= 32) throw "VarInt is too big";
+    }
+    return value;
+}
+*/
+
+int cs_knownPacks(int client_fd)
+{    
+    auto recv_count = recv(client_fd, recv_buffer.data(), 2, MSG_PEEK);
+    if (recv_count != 2)
+    {
+        return 1;
+    }
+    auto length = readVarInt(client_fd);
+    
+    std::vector<char> buf(length + 1);
+    recv(client_fd, buf.data(), buf.size(), false);
+    return 0;
 }
 
 // C->S Serverbound Plugin Message

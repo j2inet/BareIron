@@ -41,6 +41,7 @@
 #include "registries.hpp"
 #include "procedures.hpp"
 #include "serialize.hpp"
+#include "protocol.hpp"
 
 
 std::string getStateName(int state)
@@ -105,6 +106,7 @@ void handlePacket (int client_fd, int length, int packet_id, int state) {
       else if (state == STATE_CONFIGURATION) {
         if (cs_clientInformation(client_fd)) break;
         if (sc_knownPacks(client_fd)) break;
+        if (cs_knownPacks(client_fd)) break;
         if (sc_registries(client_fd)) break;
 
         #ifdef SEND_BRAND

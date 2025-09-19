@@ -28,24 +28,12 @@
 #include "procedures.hpp"
 #include "tools.hpp"
 
-/*
-#ifndef htonll
-  static uint64_t htonll (uint64_t value) {
-  #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-    return ((uint64_t)htonl((uint32_t)(value >> 32))) |
-           ((uint64_t)htonl((uint32_t)(value & 0xFFFFFFFF)) << 32);
-  #else
-    return value;
-  #endif
-  }
-#endif
-*/
-
 // Keep track of the total amount of bytes received with recv_all
 // Helps notice misread packets and clean up after errors
 uint64_t total_bytes_received = 0;
 
 SSIZE_T recv_all (int client_fd, void *buf, size_t n, uint8_t require_first) {
+    std::vector<byte> receivedBytes(n);
   char *p = static_cast<char*>(buf);
   size_t total = 0;
 
@@ -65,6 +53,7 @@ SSIZE_T recv_all (int client_fd, void *buf, size_t n, uint8_t require_first) {
   }
 
   // Busy-wait (with task yielding) until we get exactly n bytes
+  //JiJ::I don't like busy waits. Consider making 1 thread per client and busy-wait
   while (total < n) {
     SSIZE_T r = recv(client_fd, p + total, n - total, 0);
     if (r < 0) {

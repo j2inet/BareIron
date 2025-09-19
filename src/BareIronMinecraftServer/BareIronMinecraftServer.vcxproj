@@ -137,6 +137,7 @@
     <ClInclude Include="globals.hpp" />
     <ClInclude Include="packets.hpp" />
     <ClInclude Include="procedures.hpp" />
+    <ClInclude Include="protocol.hpp" />
     <ClInclude Include="registries.hpp" />
     <ClInclude Include="serialize.hpp" />
     <ClInclude Include="structures.hpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="packets.cpp" />
     <ClCompile Include="procedures.cpp" />
+    <ClCompile Include="protocol.cpp" />
     <ClCompile Include="registries.cpp" />
     <ClCompile Include="serialize.cpp" />
     <ClCompile Include="structures.cpp" />
